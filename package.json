@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "next-lp",
+=======
+  "name": "frontend",
+>>>>>>> 1ebad69 (third commit)
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +13,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "dotenv": "^16.4.1",
+>>>>>>> 1ebad69 (third commit)
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "next": "15.2.2"
