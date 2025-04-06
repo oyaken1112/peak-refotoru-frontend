@@ -67,5 +67,5 @@ jobs:
         with:
           app-name: 'tech0-gen-8-step4-peak-front'
           slot-name: 'Production'
-          package: .
+          package: .next/standalone
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_967ABA161CE949748A39FCDF228C1204 }}
