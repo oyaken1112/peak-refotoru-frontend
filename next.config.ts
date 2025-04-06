@@ -1,52 +1,22 @@
 /** @type {import('next').NextConfig} */
-export default async () => {
-  let userConfig = undefined;
-
-  try {
-    userConfig = await import('./v0-user-next.config.mjs');
-  } catch (e) {
-    try {
-      userConfig = await import('./v0-user-next.config');
-    } catch (innerError) {
-      // ignore error
-    }
-  }
-
-  const nextConfig = {
-    output: 'standalone', // デプロイ時に追加
-    eslint: {
-      ignoreDuringBuilds: true,
-    },
-    typescript: {
-      ignoreBuildErrors: true,
-    },
-    images: {
-      unoptimized: true,
-    },
-    experimental: {
-      webpackBuildWorker: true,
-      parallelServerBuildTraces: true,
-      parallelServerCompiles: true,
-    },
-  };
-
-  if (userConfig) {
-    const config = userConfig.default || userConfig;
-
-    for (const key in config) {
-      if (
-        typeof nextConfig[key] === 'object' &&
-        !Array.isArray(nextConfig[key])
-      ) {
-        nextConfig[key] = {
-          ...nextConfig[key],
-          ...config[key],
-        };
-      } else {
-        nextConfig[key] = config[key];
-      }
-    }
-  }
-
-  return nextConfig;
+const nextConfig = {
+  output: 'standalone', // Azure App Service で必要
+  eslint: {
+    ignoreDuringBuilds: true, // 本番ビルドでは ESLint を無視
+  },
+  typescript: {
+    ignoreBuildErrors: true, // 型エラーでビルドが止まらないように
+  },
+  images: {
+    unoptimized: true, // Image 最適化を無効（Next.jsの外部ホストでデプロイする場合に便利）
+  },
+  swcMinify: false, // SWC による JS/CSS の圧縮を無効（cssnano-simple のエラー防止）
+  experimental: {
+    webpackBuildWorker: true,
+    parallelServerBuildTraces: true,
+    parallelServerCompiles: true,
+    optimizeCss: false, // CSS 最適化を無効（cssnano-simple エラーの原因）
+  },
 };
+
+export default nextConfig;
