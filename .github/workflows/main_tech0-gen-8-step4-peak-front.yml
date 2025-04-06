@@ -18,12 +18,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
 
       - name: Install pnpm
         run: |
@@ -38,9 +32,12 @@ jobs:
 
       - name: Prepare deployment package
         run: |
-          mkdir -p deploy/.next
+          mkdir -p deploy
           cp -r .next/standalone/* deploy/
-          cp -r .next/static deploy/.next/static
+          if [ -d ".next/static" ]; then
+            mkdir -p deploy/.next
+            cp -r .next/static deploy/.next/static
+          fi
           cp -r public deploy/public || true
           cp next.config.js deploy/
           cp package.json deploy/
