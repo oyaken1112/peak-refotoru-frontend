@@ -30,7 +30,9 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Build Next.js app
-        run: pnpm run build
+        run: |
+          export NEXT_DISABLE_MINIFIER=1
+          pnpm run build
 
       - name: Prepare deployment package
         run: |
