@@ -10,54 +10,57 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'pnpm'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
 
-    - name: Install pnpm
-      run: npm install -g pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-    - name: Install dependencies
-      run: pnpm install
+      - name: Install dependencies
+        run: pnpm install
 
-    - name: Build Next.js app
-      run: pnpm build
+      - name: Build Next.js app
+        run: |
+          export NEXT_DISABLE_MINIFIER=1
+          pnpm run build
 
-    - name: Archive production artifact
-      run: |
-        mkdir -p deploy
-        cp -r .next/standalone deploy/
-        cp -r public deploy/
-        cp -r .next/static deploy/.next/
-        cp package.json deploy/
-      # 👆 これでdeployフォルダに必要なものを集める
+      - name: Prepare deployment package
+        run: |
+          mkdir -p deploy
+          cp -r .next/standalone/* deploy/
+          cp -r public deploy/public
+          cp -r .next/static deploy/.next/static
+          cp next.config.js deploy/
+          cp -r node_modules deploy/node_modules  # optional: for non-standalone
+          cp -r package.json deploy/package.json  # optional
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: nextjs-app
-        path: deploy
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextjs-app
+          path: deploy/
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v4
-      with:
-        name: nextjs-app
-        path: .
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: nextjs-app
+          path: .
 
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v3
-      with:
-        app-name: tech0-gen-8-step4-peak-front
-        slot-name: Production
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: .
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: tech0-gen-8-step4-peak-front
+          slot-name: Production
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          package: .
