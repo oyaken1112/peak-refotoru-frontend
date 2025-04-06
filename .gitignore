@@ -1,0 +1,46 @@
+# Node modules
+node_modules/
+
+# Next.js build outputs
+.next/
+out/
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE/Editor configs
+.vscode/
+.idea/
+*.sw?
+
+# Optional build files
+coverage/
+build/
+.cache/
+turbo/
+
+# Misc
+*.zip
+*.bak
+*.tmp
+*.old
+*.orig
+*.rej
+
+# GitHub artifacts
+release.zip
+deploy/
