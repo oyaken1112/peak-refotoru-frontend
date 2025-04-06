@@ -17,7 +17,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -37,8 +36,8 @@ jobs:
           cp -r public deploy/public
           cp -r .next/static deploy/.next/static
           cp next.config.js deploy/
-          cp -r node_modules deploy/node_modules  # optional: for non-standalone
-          cp -r package.json deploy/package.json  # optional
+          cp package.json deploy/
+          cp -r node_modules deploy/node_modules
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
